@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+    --background: #ffffff;
+    --foreground: #111827;
+
+    --m3-red: #C41E3A;
+    --m3-green: #15803D;
+    --m3-green-soft: #e8f5e9;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-brand-red: var(--m3-red);
+    --color-brand-green: var(--m3-green);
+    --color-brand-green-soft: var(--m3-green-soft);
+}
+
+body {
+    background: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+
+/* Force light mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #ffffff;
+        --foreground: #111827;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@layer base {
+    button {
+        @apply cursor-pointer;
+    }
+}
+
+@layer utilities {
+
+    /* Rotates the food background glow */
+    .animate-custom-rotate {
+        animation: custom-rotate 20s linear infinite;
+    }
+
+    /* Makes leaves float up and down slightly */
+    .animate-leaf-float {
+        animation: leaf-float 5s ease-in-out infinite;
+    }
+
+    @keyframes custom-rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes leaf-float {
+
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-20px) rotate(10deg);
+        }
+    }
+}
