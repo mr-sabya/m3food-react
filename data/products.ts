@@ -1,26 +1,34 @@
-import { Product } from "@/types/product";
+import { Product } from '../types/product';
 
-export const products: Product[] = [
+export const featuredProducts: Product[] = [
     {
         id: 1,
-        slug: "chuijhal",
-        name: "চুইঝাল",
+        name: "চুইঝাল (Chuijhal) - প্রিমিয়াম কোয়ালিটি",
         price: 990,
-        image: "/images/chuijhal.jpg",
-        description: "Fresh and authentic chuijhal directly from farm.",
-        variants: [
-            { name: "চিকন", price: 990 },
-            { name: "মোটা", price: 1290 },
-        ],
+        oldPrice: 1290,
+        image: "https://m3food.com/wp-content/uploads/2024/06/Screenshot_200-600x601.png",
+        tag: "Sale!",
+        slug: "premium-chuijhal",
+        category: "Chuijhal"
     },
     {
         id: 2,
-        slug: "chuijhal-achar",
-        name: "চুইঝাল আচার (১+১)",
+        name: "চুইঝাল আচার কম্বো ১+১ = ২টি",
         price: 1090,
-        oldPrice: 1290,
-        image: "/images/chuijhal-achar.jpg",
-        description: "Homemade spicy chuijhal pickle combo.",
-        variants: [],
+        oldPrice: 1200,
+        image: "https://m3food.com/wp-content/uploads/2024/06/Screenshot_202.png",
+        tag: "Sale!",
+        slug: "chuijhal-achar-combo",
+        category: "Combo"
+    },
+    {
+        id: 3,
+        name: "স্পেশাল চুইঝাল আচার (Chuijhal Achar)",
+        price: 495,
+        oldPrice: 790,
+        image: "https://m3food.com/wp-content/uploads/2025/03/132-768x768.jpg",
+        tag: "Sale!",
+        slug: "special-chuijhal-achar",
+        category: "Achar"
     },
 ];

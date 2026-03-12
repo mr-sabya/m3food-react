@@ -1,15 +1,10 @@
-export type ProductVariant = {
-    name: string;
-    price: number;
-};
-
-export type Product = {
+export interface Product {
     id: number;
-    slug: string;
     name: string;
-    price: number;
+    price: number;       // ক্যালকুলেশনের জন্য নাম্বার রাখা সেরা
     oldPrice?: number;
     image: string;
-    description: string;
-    variants: ProductVariant[];
-};
+    tag?: string;
+    slug: string;
+    category: string;    // এটি ফিল্টারের জন্য অবশ্যই লাগবে
+}

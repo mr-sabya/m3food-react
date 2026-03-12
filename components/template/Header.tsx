@@ -22,7 +22,7 @@ export default function Header() {
 
     return (
         <>
-            <header className="sticky top-0 z-50 bg-white shadow-sm font-['Hind_Siliguri']">
+            <header className="bg-white shadow-sm font-['Hind_Siliguri']">
                 {/* --- Top Utility Bar --- */}
                 <div className="bg-[#f8f8f8] hidden md:block">
                     <div className="container mx-auto px-4 py-1.5 flex justify-between items-center text-[13px] text-gray-600">
