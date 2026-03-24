@@ -22,7 +22,7 @@ export default function ShopPage() {
 
         // ১. ক্যাটাগরি ফিল্টার
         if (selectedCategory !== "All") {
-            result = result.filter(p => p.category === selectedCategory);
+            result = result.filter(p => p.categories.includes(selectedCategory));
         }
 
         // ২. সর্টিং লজিক
@@ -60,8 +60,8 @@ export default function ShopPage() {
                                             key={cat}
                                             onClick={() => setSelectedCategory(cat)}
                                             className={`w-full text-left px-4 py-3 rounded-xl font-bold transition-all flex justify-between items-center ${selectedCategory === cat
-                                                    ? "bg-[#004d26] text-white shadow-lg"
-                                                    : "text-slate-600 hover:bg-gray-50"
+                                                ? "bg-[#004d26] text-white shadow-lg"
+                                                : "text-slate-600 hover:bg-gray-50"
                                                 }`}
                                         >
                                             {cat}

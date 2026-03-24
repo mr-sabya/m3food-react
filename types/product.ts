@@ -10,4 +10,5 @@ export interface Product {
     is_featured: boolean;
     is_new: boolean;
     stock: number;
+    categories: string[]; 
 }

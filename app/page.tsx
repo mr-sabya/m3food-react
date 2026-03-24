@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Hero from '../components/home/Hero';
 import TrustBadges from '../components/home/TrustBadges';
 import FeaturedProducts from '../components/home/FeaturedProducts';
-import { featuredProducts } from '../data/products';
 
 export default function M3FoodHome() {
     const [cartCount, setCartCount] = useState(0);
@@ -24,7 +23,6 @@ export default function M3FoodHome() {
 
             {/* ৩. পপুলার প্রোডাক্ট সেকশন */}
             <FeaturedProducts
-                products={featuredProducts}
                 onAddToCart={handleAddToCart}
             />
 
