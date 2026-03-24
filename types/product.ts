@@ -1,10 +1,13 @@
 export interface Product {
     id: number;
     name: string;
-    price: number;       // ক্যালকুলেশনের জন্য নাম্বার রাখা সেরা
-    oldPrice?: number;
-    image: string;
-    tag?: string;
     slug: string;
-    category: string;    // এটি ফিল্টারের জন্য অবশ্যই লাগবে
+    image: string;      // comes from thumbnail_url
+    thumbnail: string;      // comes from thumbnail_url
+    price: number;      // comes from effective_price
+    oldPrice: number | null;
+    tag: string | null;
+    is_featured: boolean;
+    is_new: boolean;
+    stock: number;
 }

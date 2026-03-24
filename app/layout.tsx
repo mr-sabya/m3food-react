@@ -26,8 +26,9 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body className="font-['Hind_Siliguri'] bg-white text-slate-900">
+        // Add suppressHydrationWarning here
+        <html lang="en" suppressHydrationWarning>
+            <body className={`${geistSans.variable} ${geistMono.variable} font-['Hind_Siliguri'] bg-white text-slate-900`}>
                 <Header />
                 <main className="min-h-screen">{children}</main>
                 <Footer />

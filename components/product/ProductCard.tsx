@@ -17,7 +17,7 @@ export default function ProductCard({ product, onAddToCart }: Props) {
             <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-50 mb-4 w-full">
                 <Link href={`/product/${product.slug}`}>
                     <img
-                        src={product.image}
+                        src={product.thumbnail}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
                     />
@@ -37,7 +37,7 @@ export default function ProductCard({ product, onAddToCart }: Props) {
             {/* Text & Price Info */}
             <div className="text-center space-y-2 w-full flex flex-col flex-grow">
                 <Link href={`/product/${product.slug}`}>
-                    <h3 className="font-bold text-sm md:text-base text-slate-800 line-clamp-2 h-10 leading-snug hover:text-[#004d26] transition">
+                    <h3 className="font-bold text-sm md:text-base text-slate-800 line-clamp-2 leading-snug hover:text-[#004d26] transition">
                         {product.name}
                     </h3>
                 </Link>
