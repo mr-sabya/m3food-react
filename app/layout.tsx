@@ -26,9 +26,13 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        // Add suppressHydrationWarning here
         <html lang="en" suppressHydrationWarning>
-            <body className={`${geistSans.variable} ${geistMono.variable} font-['Hind_Siliguri'] bg-white text-slate-900`}>
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} font-['Hind_Siliguri'] bg-white text-slate-900`}
+                // Adding this here suppresses the warning caused by browser extensions 
+                // modifying attributes on the body tag (like ColorZilla)
+                suppressHydrationWarning
+            >
                 <Header />
                 <main className="min-h-screen">{children}</main>
                 <Footer />

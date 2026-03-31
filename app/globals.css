@@ -116,3 +116,34 @@ html {
     background-repeat: no-repeat;
     /* টেক্সটের পিছনে থাকবে */
 }
+
+.price-old {
+    position: relative;
+    display: inline-block;
+}
+
+.price-old::after {
+    content: "";
+    position: absolute;
+    left: -5%;
+    top: 50%;
+    width: 110%;
+    height: 3px;
+    background: red;
+    transform: rotate(-8deg);
+}
+
+.price-highlight {
+    position: relative;
+    display: inline-block;
+    padding: 2px 12px;
+}
+
+.price-highlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 3px solid #facc15; /* yellow */
+    border-radius: 999px;
+    transform: rotate(-5deg);
+}

@@ -1,8 +1,8 @@
 export const InfoText = ({ data }: { data: any }) => (
-    <section style={{ backgroundColor: data.bg_color }} className="py-12 px-4 text-center">
+    <section className="py-12 px-4 text-center">
         <div className="max-w-4xl mx-auto">
-            <h3 style={{ color: data.text_color }} className="text-2xl font-bold mb-4">{data.question}</h3>
-            <p style={{ color: data.text_color }} className="text-lg md:text-xl leading-relaxed opacity-90">
+            <h3 className="text-[#ff0000] text-2xl font-bold mb-4">{data.question}</h3>
+            <p className="text-[17px] md:text-[18px] font-black text-[#004d26] leading-relaxed">
                 {data.answer}
             </p>
         </div>
