@@ -23,17 +23,17 @@ export const MediaReports = ({ data }: { data: any }) => {
     if (validVideos.length === 0) return null;
 
     return (
-        <section className="py-16 px-4 bg-gray-50 text-center">
+        <section className="pt-16 px-4 bg-gray-50 text-center">
             <OrderButton />
             <div className="max-w-5xl mx-auto">
-                <div className="inline-block px-8 py-3 rounded-2xl font-black text-xl md:text-2xl bg-[#004d26] text-[#FCD34D] mb-12 shadow-lg transform -rotate-1">
+                <div className="inline-block px-8 py-3 rounded-2xl font-black text-xl md:text-2xl bg-[#004d26] text-[#FCD34D] mb-8 shadow-lg transform">
                     {data.title}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {validVideos.map((video: any) => (
-                        <div key={video.id} className="bg-white p-3 rounded-3xl shadow-xl border border-gray-100 transition-transform hover:scale-[1.02]">
-                            <div className="relative aspect-video bg-black rounded-2xl overflow-hidden mb-4">
+                        <div key={video.id} className="bg-white rounded-3xl shadow-xl border border-gray-100 transition-transform hover:scale-[1.02] p-2">
+                            <div className="relative aspect-video bg-black rounded-2xl overflow-hidden">
                                 <iframe
                                     className="w-full h-full"
                                     src={getEmbedUrl(video.video_link)!}
@@ -41,9 +41,7 @@ export const MediaReports = ({ data }: { data: any }) => {
                                     title={video.video_title}
                                 ></iframe>
                             </div>
-                            {video.video_title && (
-                                <h4 className="font-bold text-gray-700 px-2">{video.video_title}</h4>
-                            )}
+                            
                         </div>
                     ))}
                 </div>

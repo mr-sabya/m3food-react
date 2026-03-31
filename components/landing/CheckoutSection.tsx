@@ -102,12 +102,21 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
         };
 
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+            const API_URL = process.env.NEXT_PUBLIC_API_URL;
+            const API_KEY = process.env.NEXT_PUBLIC_API_KEY; // Get key from env
+
+            // API_URL এবং API_KEY চেক করে নেওয়া ভালো
+            if (!API_URL) {
+                console.error("API_URL is not defined in .env file");
+                return;
+            }
+
             const response = await fetch(`${API_URL}/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-API-KEY': API_KEY || ''
                 },
                 body: JSON.stringify(payload)
             });

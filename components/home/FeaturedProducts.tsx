@@ -20,9 +20,16 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
         const fetchProducts = async () => {
             setLoading(true);
             try {
-                // Fetching from your Laravel API
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
-                const res = await fetch(`${API_URL}/products`);
+                const API_URL = process.env.NEXT_PUBLIC_API_URL;
+                const API_KEY = process.env.NEXT_PUBLIC_API_KEY; // Get key from env
+
+                const res = await fetch(`${API_URL}/products`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-API-KEY': API_KEY || '' // মিডলওয়্যারের সাথে মিল রেখে সরাসরি কি পাঠানো হচ্ছে
+                    }
+                });
 
                 if (!res.ok) throw new Error("Failed to fetch");
 

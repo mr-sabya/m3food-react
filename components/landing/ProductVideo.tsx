@@ -23,7 +23,7 @@ export const ProductVideo = ({ data }: { data: any }) => {
     if (!embedUrl) return null;
 
     return (
-        <section className="py-12 px-4 bg-white">
+        <section className="pt-12 px-4 bg-white">
             <OrderButton />
             <div className="max-w-5xl mx-auto text-center">
                 {data.video_title && (
@@ -32,7 +32,7 @@ export const ProductVideo = ({ data }: { data: any }) => {
                     </h2>
                 )}
 
-                <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-[6px] border-gray-100 bg-black group transition-all hover:border-[#004d26]/20">
+                <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-[6px] border-gray-100 bg-black group transition-all">
                     <iframe
                         className="w-full h-full"
                         src={embedUrl}
