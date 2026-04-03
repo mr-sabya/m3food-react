@@ -25,7 +25,7 @@ export const ProductVideo = ({ data }: { data: any }) => {
     return (
         <section className="pt-12 px-4 bg-white">
             <OrderButton />
-            <div className="max-w-5xl mx-auto text-center">
+            <div className="max-w-6xl mx-auto text-center">
                 {data.video_title && (
                     <h2 className="text-2xl md:text-4xl font-black text-[#004d26] mb-8 inline-block border-b-4 border-yellow-400 pb-2">
                         {data.video_title}

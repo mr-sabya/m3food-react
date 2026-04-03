@@ -2,7 +2,7 @@ import { Check } from 'lucide-react';
 
 export const WhyDifferent = ({ data }: { data: any }) => (
     <section className="py-16 px-4 bg-white">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
             <div style={{ borderColor: data.border_color }} className="border-[3px] py-6 px-8 mb-10 text-center rounded-xl">
                 <h2 style={{ color: data.title_color }} className="text-2xl md:text-4xl font-black uppercase">
                     {data.title}

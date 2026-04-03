@@ -72,7 +72,7 @@ export default async function ProductLandingPage({ params }: { params: Promise<{
     }
 
     return (
-        <div className="bg-white font-['Hind_Siliguri'] text-slate-800 leading-relaxed overflow-x-hidden">
+        <div className="bg-white font-['Hind_Siliguri'] text-slate-800 leading-relaxed overflow-x-hidden pt-8">
 
             {/* 1. Dynamic Rendering of Laravel Sections */}
             {product.sections?.length > 0 ? (

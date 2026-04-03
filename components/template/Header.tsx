@@ -19,7 +19,7 @@ export default function Header({ settings }: HeaderProps) {
     const [cartCount] = useState(0);
 
     return (
-        <header className="bg-white shadow-sm font-['Hind_Siliguri'] sticky top-0 z-50">
+        <header className="bg-white shadow-sm font-['Hind_Siliguri'] border-b border-gray-100">
             {/* --- Top Utility Bar --- */}
             <div className="bg-[#f8f8f8] hidden md:block border-b border-gray-100">
                 <div className="container mx-auto px-4 py-2 flex justify-between items-center text-[13px] text-gray-600">

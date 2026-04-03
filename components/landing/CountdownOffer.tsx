@@ -22,7 +22,7 @@ export const CountdownOffer = ({ data }: { data: any }) => {
     return (
         <section className="pt-12 px-4">
             <div>
-                <div style={{ backgroundColor: data.bg_color || '#004d26' }} className='max-w-5xl mx-auto text-center p-3 rounded-[10px]'>
+                <div style={{ backgroundColor: data.bg_color || '#004d26' }} className='max-w-6xl mx-auto text-center p-3 rounded-[10px]'>
                     <h3 style={{ color: data.offer_title_color }} className="text-2xl md:text-3xl font-black mb-2 "
                         dangerouslySetInnerHTML={{ __html: data.offer_title }} />
                 </div>

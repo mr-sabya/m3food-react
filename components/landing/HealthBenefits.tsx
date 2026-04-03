@@ -2,7 +2,7 @@ import { CheckCircle } from 'lucide-react';
 
 export const HealthBenefits = ({ data, storageUrl }: { data: any, storageUrl: string }) => (
     <section className="bg-[#004d26] py-16 px-4">
-        <div className="max-w-5xl mx-auto bg-white rounded-[2.5rem] p-8 md:p-14 shadow-2xl">
+        <div className="max-w-6xl mx-auto bg-white rounded-[2.5rem] p-8 md:p-14 shadow-2xl">
             <h2 className="text-[#004d26] text-2xl md:text-4xl font-black text-center mb-10 border-b pb-6">
                 {data.heading}
             </h2>

@@ -157,7 +157,8 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
 
                         <div className="space-y-5">
                             {/* Location Detection Badge */}
-                            <div className={`p-3 rounded-xl flex items-center gap-3 text-sm font-bold transition-all ${formData.district ? 'bg-blue-50 text-blue-700 border border-blue-100' : 'bg-gray-50 text-gray-500'}`}>
+                            {/* hidden ক্লাসটি যোগ করা হয়েছে যাতে এটি ডিসপ্লে না হয় */}
+                            <div className={`hidden p-3 rounded-xl items-center gap-3 text-sm font-bold transition-all ${formData.district ? 'bg-blue-50 text-blue-700 border border-blue-100' : 'bg-gray-50 text-gray-500'}`}>
                                 <MapPin size={18} className={locationLoading ? "animate-bounce" : ""} />
                                 {locationLoading ? "আপনার লোকেশন খোঁজা হচ্ছে..." :
                                     formData.district ? `লোকেশন পাওয়া গেছে: ${formData.district}` :
@@ -200,13 +201,18 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                             </div>
                         </div>
 
-                        <div className="mt-4 bg-green-50 p-4 rounded-2xl text-[#004d26] flex gap-3 items-center font-bold text-sm border border-green-200">
-                            <ShieldCheck className="shrink-0 text-green-600" size={24} />
-                            ক্যাশ অন ডেলিভারি (পণ্য হাতে পেয়ে টাকা দিন)
-                        </div>
+                        <div className="space-y-3 mt-4">
+                            {/* প্রথম বক্স: ক্যাশ অন ডেলিভারি */}
+                            <div className="flex items-center gap-3 p-4 rounded-2xl bg-green-50 text-[#004d26] border border-green-100 font-bold text-sm md:text-base transition-all">
+                                <ShieldCheck className="shrink-0 text-green-600" size={22} />
+                                <span>ক্যাশ অন ডেলিভারি (পণ্য হাতে পেয়ে টাকা দিন)</span>
+                            </div>
 
-                        <div className="mt-4 text-center py-2 px-4 bg-orange-50 text-orange-700 rounded-xl font-bold border border-orange-100 text-sm md:text-base">
-                            <Truck size={18} className="inline-block me-2" /> সারা বাংলাদেশে ডেলিভারী চার্জ ফ্রি
+                            {/* দ্বিতীয় বক্স: ডেলিভারি চার্জ ফ্রি */}
+                            <div className="flex items-center gap-3 p-4 rounded-2xl bg-orange-50 text-orange-700 border border-orange-100 font-bold text-sm md:text-base transition-all">
+                                <Truck className="shrink-0 text-orange-600" size={22} />
+                                <span>সারা বাংলাদেশে ডেলিভারী চার্জ ফ্রি</span>
+                            </div>
                         </div>
                     </form>
 

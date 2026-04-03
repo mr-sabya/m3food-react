@@ -1,6 +1,6 @@
 export const FeatureGrid = ({ data, storageUrl }: { data: any, storageUrl: string }) => (
     <section className="pt-12 px-4 bg-white">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
             <h2 className="text-center text-2xl font-bold mb-10 text-[#004d26]">{data.section_title}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {data.cards?.map((card: any) => (

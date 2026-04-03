@@ -5,7 +5,7 @@ import React from 'react';
 export const BonusSection = () => {
     return (
         <section className="py-12 px-4 bg-white font-['Hind_Siliguri']">
-            <div className="max-w-5xl mx-auto text-center">
+            <div className="max-w-6xl mx-auto text-center">
 
                 {/* --- Top Paragraph --- */}
                 <p className="text-[#004d26] text-xl md:text-2xl font-black leading-relaxed mb-10">

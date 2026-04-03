@@ -23,9 +23,9 @@ export const MediaReports = ({ data }: { data: any }) => {
     if (validVideos.length === 0) return null;
 
     return (
-        <section className="pt-16 px-4 bg-gray-50 text-center">
+        <section className="pt-16 px-4 text-center">
             <OrderButton />
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-6xl mx-auto">
                 <div className="inline-block px-8 py-3 rounded-2xl font-black text-xl md:text-2xl bg-[#004d26] text-[#FCD34D] mb-8 shadow-lg transform">
                     {data.title}
                 </div>
