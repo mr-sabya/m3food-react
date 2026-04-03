@@ -79,12 +79,16 @@ export default function Header({ settings }: HeaderProps) {
                         <p className="font-black text-sm md:text-base text-slate-800">{settings?.contact_phone || "01520 101590"}</p>
                     </div>
 
-                    <div className="relative cursor-pointer group p-2.5 bg-gray-50 rounded-xl hover:bg-green-50 transition-colors border border-transparent hover:border-green-100">
+                    {/* কার্ট বাটনে লিঙ্ক যুক্ত করা হয়েছে */}
+                    <Link
+                        href="/cart"
+                        className="relative cursor-pointer group p-2.5 bg-gray-50 rounded-xl hover:bg-green-50 transition-colors border border-transparent hover:border-green-100"
+                    >
                         <ShoppingBag size={24} className="text-slate-700 group-hover:text-[#004d26]" />
                         <span className="absolute -top-2 -right-2 bg-[#004d26] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-md border-2 border-white">
                             {cartCount}
                         </span>
-                    </div>
+                    </Link>
                 </div>
             </div>
 

@@ -79,7 +79,11 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
                 /* Products Grid */
                 <div className="flex flex-wrap justify-center gap-4 md:gap-8">
                     {products.map((p) => (
-                        <div key={p.id} className="w-[calc(50%-8px)] lg:w-[calc(25%-24px)] min-w-[160px] max-w-[300px]">
+                        <div
+                            key={p.id}
+                            // ফোনের জন্য w-full (১০০%), ট্যাবলেটের জন্য ৫০%, এবং ডেস্কটপের জন্য ২৫%
+                            className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(25%-24px)] max-w-full md:max-w-[300px]"
+                        >
                             <ProductCard
                                 product={p}
                                 onAddToCart={() => onAddToCart(p)}

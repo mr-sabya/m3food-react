@@ -23,7 +23,7 @@ export default function Footer({ settings }: FooterProps) {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-[#002b15] text-white pt-20 pb-10 font-['Hind_Siliguri'] border-t-8 border-[#fad500]">
+        <footer className="bg-[#002b15] text-white pt-20 pb-10 font-['Hind_Siliguri'] border-t-8 border-[#C41E3A]">
             <div className="container mx-auto px-4">
                 {/* Main Footer Content */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/10">
@@ -40,7 +40,7 @@ export default function Footer({ settings }: FooterProps) {
                             ) : (
                                 <div className="text-3xl font-black tracking-tighter flex items-center">
                                     <span className="text-white">{settings?.website_name || "M3"}</span>
-                                    <span className="text-[#fad500]">FOOD</span>
+                                    <span className="text-[#C41E3A]">FOOD</span>
                                 </div>
                             )}
                         </Link>
@@ -66,27 +66,27 @@ export default function Footer({ settings }: FooterProps) {
                     {/* Contact Info */}
                     <div>
                         <h4 className="font-black text-xl mb-8 flex items-center gap-2">
-                            <span className="w-2 h-6 bg-[#fad500] rounded-full"></span>
+                            <span className="w-2 h-6 bg-[#C41E3A] rounded-full"></span>
                             যোগাযোগ
                         </h4>
                         <ul className="space-y-5 text-gray-300 text-sm">
                             <li className="flex items-start gap-4">
-                                <div className="p-2 bg-white/5 rounded-lg text-[#fad500]">
+                                <div className="p-2 bg-white/5 rounded-lg text-[#C41E3A]">
                                     <MapPin size={20} />
                                 </div>
                                 <span className="pt-1">{settings?.address || "আরংঘাটা বাইপাস রোড, খুলনা, বাংলাদেশ।"}</span>
                             </li>
                             <li className="flex items-center gap-4">
-                                <div className="p-2 bg-white/5 rounded-lg text-[#fad500]">
+                                <div className="p-2 bg-white/5 rounded-lg text-[#C41E3A]">
                                     <Phone size={20} />
                                 </div>
-                                <a href={`tel:${settings?.contact_phone || "01520101590"}`} className="hover:text-[#fad500] transition-colors">{settings?.contact_phone || "01520-101590"}</a>
+                                <a href={`tel:${settings?.contact_phone || "01520101590"}`} className="hover:text-[#C41E3A] transition-colors">{settings?.contact_phone || "01520-101590"}</a>
                             </li>
                             <li className="flex items-center gap-4">
-                                <div className="p-2 bg-white/5 rounded-lg text-[#fad500]">
+                                <div className="p-2 bg-white/5 rounded-lg text-[#C41E3A]">
                                     <Mail size={20} />
                                 </div>
-                                <a href={`mailto:${settings?.contact_email || "m3foodchuijhal@gmail.com"}`} className="hover:text-[#fad500] transition-colors overflow-hidden text-ellipsis">{settings?.contact_email || "m3food@gmail.com"}</a>
+                                <a href={`mailto:${settings?.contact_email || "m3foodchuijhal@gmail.com"}`} className="hover:text-[#C41E3A] transition-colors overflow-hidden text-ellipsis">{settings?.contact_email || "m3food@gmail.com"}</a>
                             </li>
                         </ul>
                     </div>
@@ -94,15 +94,25 @@ export default function Footer({ settings }: FooterProps) {
                     {/* Quick Links */}
                     <div>
                         <h4 className="font-black text-xl mb-8 flex items-center gap-2">
-                            <span className="w-2 h-6 bg-[#fad500] rounded-full"></span>
+                            <span className="w-2 h-6 bg-[#C41E3A] rounded-full"></span>
                             প্রয়োজনীয় লিংক
                         </h4>
                         <ul className="text-gray-300 text-sm space-y-4">
-                            <li><Link href="/about" className="hover:text-[#fad500] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> আমাদের সম্পর্কে</Link></li>
-                            <li><Link href="/shop" className="hover:text-[#fad500] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> শপ (পণ্যসমূহ)</Link></li>
-                            <li><Link href="/return-policy" className="hover:text-[#fad500] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> রিটার্ন পলিসি</Link></li>
-                            <li><Link href="/privacy-policy" className="hover:text-[#fad500] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> প্রাইভেসি পলিসি</Link></li>
-                            <li><Link href="/terms" className="hover:text-[#fad500] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> শর্তাবলী</Link></li>
+                            <li>
+                                <Link href="/about" className="hover:text-[#C41E3A] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> আমাদের সম্পর্কে</Link>
+                            </li>
+                            <li>
+                                <Link href="/shop" className="hover:text-[#C41E3A] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> শপ (পণ্যসমূহ)</Link>
+                            </li>
+                            <li>
+                                <Link href="/page/return-policy" className="hover:text-[#C41E3A] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> রিটার্ন পলিসি</Link>
+                            </li>
+                            <li>
+                                <Link href="/page/privacy-policy" className="hover:text-[#C41E3A] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> প্রাইভেসি পলিসি</Link>
+                            </li>
+                            <li>
+                                <Link href="/page/terms" className="hover:text-[#C41E3A] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> শর্তাবলী</Link>
+                            </li>
                         </ul>
                     </div>
 
@@ -111,13 +121,13 @@ export default function Footer({ settings }: FooterProps) {
                         <div className="bg-white/5 p-6 rounded-3xl border border-white/10">
                             <h4 className="font-black text-lg mb-2 text-white">নিউজলেটার</h4>
                             <p className="text-xs text-gray-400 mb-4">অফার ও নতুন পণ্যের আপডেট পেতে সাবস্ক্রাইব করুন।</p>
-                            <div className="flex bg-white/10 rounded-xl p-1 overflow-hidden focus-within:ring-2 ring-[#fad500] transition-all">
+                            <div className="flex bg-white/10 rounded-xl p-1 overflow-hidden focus-within:ring-2 ring-[#C41E3A] transition-all">
                                 <input
                                     type="email"
                                     placeholder="আপনার ইমেইল"
                                     className="bg-transparent border-none py-2 px-3 text-xs flex-1 outline-none text-white placeholder:text-gray-500"
                                 />
-                                <button className="bg-[#fad500] text-[#002b15] px-4 rounded-lg hover:bg-white transition-colors duration-300">
+                                <button className="bg-[#C41E3A] text-[#002b15] px-4 rounded-lg hover:bg-white transition-colors duration-300">
                                     <Send size={18} />
                                 </button>
                             </div>
@@ -143,7 +153,7 @@ export default function Footer({ settings }: FooterProps) {
                             href="https://sabyaroy.com/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-white hover:text-[#fad500] transition-colors border-b border-white/20 hover:border-[#fad500]"
+                            className="text-white hover:text-[#C41E3A] transition-colors border-b border-white/20 hover:border-[#C41E3A]"
                         >
                             Sabya Roy
                         </a>
