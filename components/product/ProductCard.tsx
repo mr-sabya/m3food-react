@@ -2,42 +2,37 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // Added for redirection
+import { useRouter } from 'next/navigation';
 import { Heart, Loader2, ShoppingCart, Zap } from 'lucide-react';
 import { Product } from '../../types/product';
 import { useCart } from '../../context/CartContext';
 
 type Props = {
     product: Product;
+    onAddToCart?: (product: Product) => void; // এই লাইনটি যোগ করা হয়েছে
 };
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, onAddToCart }: Props) { // onAddToCart ডিস্ট্রাকচার করা হয়েছে
     const { addToCart } = useCart();
-    const router = useRouter(); // Initialize router
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [isOrdering, setIsOrdering] = useState(false);
 
     // 1. Add to Cart only
     const handleAdd = async () => {
         setLoading(true);
-        // Passing product.id and product.price to the context
-        await addToCart(product.id, product.price);
-        setLoading(false);
-    };
-
-    // 2. Add to Cart and Redirect to Cart Page (Direct Order)
-    const handleOrderNow = async () => {
-        setIsOrdering(true);
         const success = await addToCart(product.id, product.price);
-        if (success) {
-            router.push('/cart'); // Redirect to cart or checkout
+        
+        // যদি কার্টে সফলভাবে অ্যাড হয় এবং প্যারেন্ট থেকে কোনো ফাংশন (onAddToCart) আসে, তবে সেটি কল হবে
+        if (success && onAddToCart) {
+            onAddToCart(product);
         }
-        setIsOrdering(false);
+        
+        setLoading(false);
     };
 
     return (
         <div className="group relative bg-white border border-gray-100 rounded-3xl p-3 md:p-5 hover:shadow-2xl transition duration-500 flex flex-col items-center w-full">
-
             {/* Image Container */}
             <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-50 mb-4 w-full">
                 <Link href={`/product/${product.slug}`}>
@@ -75,7 +70,6 @@ export default function ProductCard({ product }: Props) {
                 </div>
 
                 <div className="mt-auto pt-3 space-y-2">
-                    {/* Add to Cart Button */}
                     <button
                         onClick={handleAdd}
                         disabled={loading || isOrdering}
