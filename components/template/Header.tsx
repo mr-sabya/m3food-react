@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ShoppingBag, Phone, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useCart } from '../../context/CartContext';
 
 interface HeaderProps {
     settings?: {
@@ -16,7 +17,7 @@ interface HeaderProps {
 }
 
 export default function Header({ settings }: HeaderProps) {
-    const [cartCount] = useState(0);
+    const { cartCount } = useCart(); // Use the global count
 
     return (
         <header className="bg-white shadow-sm font-['Hind_Siliguri'] border-b border-gray-100">
@@ -85,9 +86,12 @@ export default function Header({ settings }: HeaderProps) {
                         className="relative cursor-pointer group p-2.5 bg-gray-50 rounded-xl hover:bg-green-50 transition-colors border border-transparent hover:border-green-100"
                     >
                         <ShoppingBag size={24} className="text-slate-700 group-hover:text-[#004d26]" />
-                        <span className="absolute -top-2 -right-2 bg-[#004d26] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-md border-2 border-white">
-                            {cartCount}
-                        </span>
+
+                        {cartCount > 0 && (
+                            <span className="absolute -top-2 -right-2 bg-[#C41E3A] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-md border-2 border-white animate-bounce">
+                                {cartCount}
+                            </span>
+                        )}
                     </Link>
                 </div>
             </div>

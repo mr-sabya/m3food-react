@@ -2,73 +2,50 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ShoppingCart, ShieldCheck, CheckCircle2, Truck, Loader2, MapPin } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 export const CheckoutSection = ({ productData }: { productData: any }) => {
     const router = useRouter();
+    const { refreshCart, addToCart } = useCart(); // Use addToCart from context
     const product = productData?.data || productData;
 
-    // Form States
     const [selectedVariant, setSelectedVariant] = useState<any>(null);
     const [loading, setLoading] = useState(false);
-    const [locationLoading, setLocationLoading] = useState(false); // New: Location loading
+    const [locationLoading, setLocationLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
         address: '',
-        // New: Location fields
         district: '',
         latitude: null as number | null,
         longitude: null as number | null
     });
 
-    // --- EFFECT: Set Default Variant ---
     useEffect(() => {
         if (product?.variants?.length > 0) {
             setSelectedVariant(product.variants[0]);
         }
     }, [product]);
 
-    // --- EFFECT: Auto-detect Location ---
     useEffect(() => {
         detectLocation();
     }, []);
 
     const detectLocation = () => {
         if (!navigator.geolocation) return;
-
         setLocationLoading(true);
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const { latitude, longitude } = position.coords;
-
                 try {
-                    // Reverse Geocode to get District Name (OpenStreetMap Nominatim)
-                    const res = await fetch(
-                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                    );
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
                     const data = await res.json();
-
-                    // For Bangladesh: state_district is usually the District name
-                    const districtName = data.address.state_district || data.address.city || data.address.county || '';
-
-                    setFormData(prev => ({
-                        ...prev,
-                        latitude: latitude,
-                        longitude: longitude,
-                        district: districtName
-                    }));
-                } catch (error) {
-                    console.error("Location name fetch error:", error);
-                } finally {
-                    setLocationLoading(false);
-                }
+                    const districtName = data.address.state_district || data.address.city || '';
+                    setFormData(prev => ({ ...prev, latitude, longitude, district: districtName }));
+                } catch (error) { console.error(error); } finally { setLocationLoading(false); }
             },
-            (error) => {
-                console.warn("Location permission denied or error:", error);
-                setLocationLoading(false);
-            },
-            { enableHighAccuracy: true }
+            () => setLocationLoading(false)
         );
     };
 
@@ -77,7 +54,7 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
     const activePrice = selectedVariant ? selectedVariant.pricing?.sale_price : product.price;
     const regularPrice = selectedVariant ? selectedVariant.pricing?.regular_price : product.regular_price;
 
-    // --- API Handler ---
+    // --- UPDATED API HANDLER ---
     const handleOrder = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -88,29 +65,27 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
 
         setLoading(true);
 
-        const payload = {
-            name: formData.name,
-            phone: formData.phone,
-            address: formData.address,
-            product_id: product.id,
-            variant_id: selectedVariant?.id || null,
-            quantity: 1,
-            // Added Location Data
-            district: formData.district,
-            latitude: formData.latitude,
-            longitude: formData.longitude
-        };
-
         try {
             const API_URL = process.env.NEXT_PUBLIC_API_URL;
-            const API_KEY = process.env.NEXT_PUBLIC_API_KEY; // Get key from env
+            const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+            const sessionId = localStorage.getItem('cart_session_id');
 
-            // API_URL এবং API_KEY চেক করে নেওয়া ভালো
-            if (!API_URL) {
-                console.error("API_URL is not defined in .env file");
+            // 1. Force add THIS specific product to the cart first
+            // This ensures the Multi-item API finds the item in the database
+            const addSuccess = await addToCart(
+                product.id, 
+                activePrice, 
+                1, 
+                selectedVariant ? { variant_id: selectedVariant.id } : null
+            );
+
+            if (!addSuccess) {
+                alert("অর্ডার প্রসেস করা যাচ্ছে না। আবার চেষ্টা করুন।");
+                setLoading(false);
                 return;
             }
 
+            // 2. Submit the Order using session_id
             const response = await fetch(`${API_URL}/orders`, {
                 method: 'POST',
                 headers: {
@@ -118,19 +93,29 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                     'Accept': 'application/json',
                     'X-API-KEY': API_KEY || ''
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    name: formData.name,
+                    phone: formData.phone,
+                    address: formData.address,
+                    district: formData.district,
+                    latitude: formData.latitude,
+                    longitude: formData.longitude,
+                    session_id: sessionId, // API handles multiple items via this
+                })
             });
 
             const result = await response.json();
 
             if (result.success) {
+                localStorage.removeItem('cart_session_id'); // Clear after purchase
+                refreshCart(); 
                 router.push(`/order-success/${result.order_number}`);
             } else {
                 alert(result.message || "অর্ডারটি সম্পন্ন করা সম্ভব হয়নি।");
             }
         } catch (error) {
             console.error("Order Error:", error);
-            alert("সার্ভার সমস্যা! অনুগ্রহ করে কিছুক্ষণ পর চেষ্টা করুন।");
+            alert("সার্ভার সমস্যা!");
         } finally {
             setLoading(false);
         }
@@ -143,12 +128,10 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                     <h2 className="text-3xl md:text-4xl font-black text-[#004d26] mb-3">
                         অর্ডার কনফার্ম করতে নিচের ফর্মটি পূরণ করুন
                     </h2>
-                    <p className="text-gray-600">সঠিক তথ্য দিয়ে ফর্মটি পূরণ করুন, আমাদের প্রতিনিধি আপনাকে কল করবে।</p>
+                    <p className="text-gray-600 font-bold leading-relaxed">সঠিক তথ্য দিয়ে ফর্মটি পূরণ করুন, আমাদের প্রতিনিধি আপনাকে কল করবে।</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-
-                    {/* LEFT: Shipping Form */}
                     <form onSubmit={handleOrder} className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
                         <h3 className="text-xl font-bold mb-6 flex items-center gap-3 text-gray-800 border-b pb-4">
                             <span className="bg-[#004d26] text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md">১</span>
@@ -156,8 +139,6 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                         </h3>
 
                         <div className="space-y-5">
-                            {/* Location Detection Badge */}
-                            {/* hidden ক্লাসটি যোগ করা হয়েছে যাতে এটি ডিসপ্লে না হয় */}
                             <div className={`hidden p-3 rounded-xl items-center gap-3 text-sm font-bold transition-all ${formData.district ? 'bg-blue-50 text-blue-700 border border-blue-100' : 'bg-gray-50 text-gray-500'}`}>
                                 <MapPin size={18} className={locationLoading ? "animate-bounce" : ""} />
                                 {locationLoading ? "আপনার লোকেশন খোঁজা হচ্ছে..." :
@@ -170,7 +151,7 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                                 <input
                                     type="text"
                                     placeholder="নাম"
-                                    className="w-full border-2 p-4 rounded-2xl outline-none focus:border-[#004d26] bg-gray-50 focus:bg-white transition-all"
+                                    className="w-full border-2 p-4 rounded-2xl outline-none focus:border-[#004d26] bg-gray-50 focus:bg-white transition-all font-bold"
                                     required
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -182,7 +163,7 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                                 <input
                                     type="tel"
                                     placeholder="01XXXXXXXXX"
-                                    className="w-full border-2 p-4 rounded-2xl outline-none focus:border-[#004d26] bg-gray-50 focus:bg-white transition-all"
+                                    className="w-full border-2 p-4 rounded-2xl outline-none focus:border-[#004d26] bg-gray-50 focus:bg-white transition-all font-bold"
                                     required
                                     value={formData.phone}
                                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -193,7 +174,7 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                                 <label className="block text-sm font-bold mb-2 text-gray-700">আপনার সম্পূর্ণ ঠিকানা লিখুন *</label>
                                 <textarea
                                     placeholder="গ্রাম, ডাকঘর, থানা ও জেলা"
-                                    className="w-full border-2 p-4 rounded-2xl h-28 outline-none focus:border-[#004d26] bg-gray-50 focus:bg-white transition-all"
+                                    className="w-full border-2 p-4 rounded-2xl h-28 outline-none focus:border-[#004d26] bg-gray-50 focus:bg-white transition-all font-bold shadow-inner"
                                     required
                                     value={formData.address}
                                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
@@ -202,13 +183,11 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                         </div>
 
                         <div className="space-y-3 mt-4">
-                            {/* প্রথম বক্স: ক্যাশ অন ডেলিভারি */}
                             <div className="flex items-center gap-3 p-4 rounded-2xl bg-green-50 text-[#004d26] border border-green-100 font-bold text-sm md:text-base transition-all">
                                 <ShieldCheck className="shrink-0 text-green-600" size={22} />
                                 <span>ক্যাশ অন ডেলিভারি (পণ্য হাতে পেয়ে টাকা দিন)</span>
                             </div>
 
-                            {/* দ্বিতীয় বক্স: ডেলিভারি চার্জ ফ্রি */}
                             <div className="flex items-center gap-3 p-4 rounded-2xl bg-orange-50 text-orange-700 border border-orange-100 font-bold text-sm md:text-base transition-all">
                                 <Truck className="shrink-0 text-orange-600" size={22} />
                                 <span>সারা বাংলাদেশে ডেলিভারী চার্জ ফ্রি</span>
@@ -216,7 +195,6 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                         </div>
                     </form>
 
-                    {/* RIGHT: Product Summary */}
                     <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100 lg:sticky lg:top-10">
                         <h3 className="text-xl font-bold mb-8 flex items-center gap-3 text-gray-800 border-b pb-4">
                             <span className="bg-[#004d26] text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md">২</span>
@@ -243,7 +221,6 @@ export const CheckoutSection = ({ productData }: { productData: any }) => {
                             </div>
                         </div>
 
-                        {/* Package Selection */}
                         <div className="mb-8">
                             <label className="block text-sm font-black text-gray-600 mb-4 uppercase tracking-wider">প্যাকেজ নির্বাচন করুন:</label>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

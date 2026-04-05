@@ -111,7 +111,7 @@ export default function Footer({ settings }: FooterProps) {
                                 <Link href="/page/privacy-policy" className="hover:text-[#C41E3A] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> প্রাইভেসি পলিসি</Link>
                             </li>
                             <li>
-                                <Link href="/page/terms" className="hover:text-[#C41E3A] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> শর্তাবলী</Link>
+                                <Link href="/page/terms-conditions" className="hover:text-[#C41E3A] hover:translate-x-2 flex items-center gap-2 transition-all group"><ExternalLink size={14} className="opacity-0 group-hover:opacity-100" /> শর্তাবলী</Link>
                             </li>
                         </ul>
                     </div>

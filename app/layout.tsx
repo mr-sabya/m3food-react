@@ -5,12 +5,14 @@ import "./globals.css";
 import Header from "../components/template/Header";
 import Footer from "../components/template/Footer";
 import BottomBar from "../components/template/BottomBar";
+import { CartProvider } from "../context/CartContext";
 
 // --- SINGLE SHARED API CALL ---
 // cache() ব্যবহারের ফলে একই রিকোয়েস্টে এই ফাংশন যতবারই কল হোক, fetch হবে মাত্র একবার।
 const getSettings = cache(async () => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+    console.log("Fetching settings from API...", API_URL);
 
     try {
         const res = await fetch(`${API_URL}/settings`, {
@@ -86,15 +88,17 @@ export default async function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} font-['Hind_Siliguri'] bg-white text-slate-900 antialiased`}
                 suppressHydrationWarning
             >
-                {/* Header-এ সেটিংস পাস করা হয়েছে */}
-                <Header settings={settings} />
+                <CartProvider>
+                    {/* Header-এ সেটিংস পাস করা হয়েছে */}
+                    <Header settings={settings} />
 
-                <main className="min-h-screen">
-                    {children}
-                </main>
+                    <main className="min-h-screen">
+                        {children}
+                    </main>
 
-                <Footer settings={settings} />
-                <BottomBar settings={settings} />
+                    <Footer settings={settings} />
+                    <BottomBar settings={settings} />
+                </CartProvider>
             </body>
         </html>
     );

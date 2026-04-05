@@ -1,78 +1,104 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { FileText, ChevronLeft, ShieldCheck, Scale, RotateCcw } from 'lucide-react';
+import { ChevronLeft, FileText, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
-// ডাইনামিক কন্টেন্ট ডাটা (এগুলো আপনি চাইলে আলাদা ফাইলে রাখতে পারেন)
-const PAGE_DATA: Record<string, { title: string; icon: any; content: React.ReactNode; updateDate: string }> = {
-    "terms": {
-        title: "শর্তাবলী (Terms & Conditions)",
-        icon: <Scale size={24} />,
-        updateDate: "০১ জানুয়ারি, ২০২৪",
-        content: (
-            <div className="space-y-6">
-                <section>
-                    <h3 className="text-xl font-black text-slate-900 mb-3">১. সাধারণ নিয়মাবলী</h3>
-                    <p>আমাদের ওয়েবসাইট ব্যবহার করার মাধ্যমে আপনি আমাদের সকল শর্তাবলী মেনে নিচ্ছেন বলে গণ্য হবে। আমরা যেকোনো সময় এই শর্তাবলী পরিবর্তন করার অধিকার রাখি।</p>
-                </section>
-                <section>
-                    <h3 className="text-xl font-black text-slate-900 mb-3">২. অর্ডার প্রক্রিয়া</h3>
-                    <p>অর্ডার কনফার্ম করার জন্য সঠিক নাম, ঠিকানা এবং মোবাইল নম্বর প্রদান করা বাধ্যতামূলক। ভুল তথ্যের কারণে ডেলিভারি দেরি হলে কর্তৃপক্ষ দায়ী থাকবে না।</p>
-                </section>
-            </div>
-        )
-    },
-    "privacy-policy": {
-        title: "গোপনীয়তা নীতি (Privacy Policy)",
-        icon: <ShieldCheck size={24} />,
-        updateDate: "০৫ জানুয়ারি, ২০২৪",
-        content: (
-            <div className="space-y-6">
-                <section>
-                    <h3 className="text-xl font-black text-slate-900 mb-3">১. তথ্য সংগ্রহ</h3>
-                    <p>আমরা আপনার নাম, ফোন নম্বর এবং ঠিকানা সংগ্রহ করি শুধুমাত্র আপনার অর্ডারটি সঠিকভাবে পৌঁছে দেওয়ার জন্য।</p>
-                </section>
-                <section>
-                    <h3 className="text-xl font-black text-slate-900 mb-3">২. তথ্যের নিরাপত্তা</h3>
-                    <p>আপনার ব্যক্তিগত তথ্য আমাদের কাছে নিরাপদ। আমরা কোনো তৃতীয় পক্ষের কাছে আপনার তথ্য বিক্রি বা শেয়ার করি না।</p>
-                </section>
-            </div>
-        )
-    },
-    "return-policy": {
-        title: "রিটার্ন ও রিফান্ড পলিসি",
-        icon: <RotateCcw size={24} />,
-        updateDate: "১০ জানুয়ারি, ২০২৪",
-        content: (
-            <div className="space-y-6">
-                <section>
-                    <h3 className="text-xl font-black text-slate-900 mb-3">১. রিটার্ন শর্ত</h3>
-                    <p>পণ্য হাতে পাওয়ার পর যদি কোনো ত্রুটি বা ভুল পণ্য পান, তবে অবশ্যই ডেলিভারি ম্যান থাকা অবস্থায় আমাদের জানান। প্যাকেট খোলার পর কোনো অভিযোগ গ্রহণ করা হবে না (যদি না সেটি গুণগত মানের সমস্যা হয়)।</p>
-                </section>
-                <section>
-                    <h3 className="text-xl font-black text-slate-900 mb-3">২. রিফান্ড সময়সীমা</h3>
-                    <p>রিটার্ন কনফার্ম হওয়ার ৩-৫ কার্যদিবসের মধ্যে আপনার রিফান্ড প্রক্রিয়া সম্পন্ন করা হবে।</p>
-                </section>
-            </div>
-        )
-    }
-};
+// 1. Define the Interface for the API response
+interface PageData {
+    id: number;
+    title: string;
+    slug: string;
+    content: string;
+    published_at: string | null;
+    updated_at: string;
+    seo: {
+        meta_title: string;
+        meta_description: string;
+        meta_keywords: string;
+        meta_robots: string;
+        canonical_url: string;
+        og_image: string | null;
+    };
+}
 
 export default function DynamicPolicyPage() {
     const params = useParams();
     const slug = params.slug as string;
-    const page = PAGE_DATA[slug];
 
-    // যদি ভুল স্লাগ দেওয়া হয়
-    if (!page) {
+    // 2. Explicitly type the state
+    const [page, setPage] = useState<PageData | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<boolean>(false);
+
+    useEffect(() => {
+        const fetchPage = async () => {
+            try {
+                setLoading(true);
+                const API_URL = process.env.NEXT_PUBLIC_API_URL;
+                const API_KEY = process.env.NEXT_PUBLIC_API_KEY; // Get key from env
+
+                const response = await fetch(`${API_URL}/pages/${slug}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-API-KEY': API_KEY || '' // মিডলওয়্যারের সাথে মিল রেখে সরাসরি কি পাঠানো হচ্ছে
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Page not found');
+                }
+
+                const result = await response.json();
+                setPage(result.data);
+                setError(false);
+            } catch (err) {
+                console.error("Fetch error:", err);
+                setError(true);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (slug) {
+            fetchPage();
+        }
+    }, [slug]);
+
+    // 3. Type the date string parameter
+    const formatDate = (dateString: string | null | undefined): string => {
+        if (!dateString) return "অজানা";
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('bn-BD', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        } catch (e) {
+            return "অজানা";
+        }
+    };
+
+    if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center font-['Hind_Siliguri']">
-                <div className="text-center">
-                    <h1 className="text-4xl font-black text-[#004d26] mb-4">৪০৪</h1>
-                    <p className="text-slate-500 font-bold mb-6">পেজটি খুঁজে পাওয়া যায়নি!</p>
-                    <Link href="/" className="bg-[#004d26] text-white px-6 py-3 rounded-2xl font-bold">হোমে ফিরে যান</Link>
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <Loader2 className="animate-spin text-[#004d26]" size={48} />
+            </div>
+        );
+    }
+
+    if (error || !page) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+                <div className="text-center bg-white p-12 rounded-[40px] shadow-xl max-w-md w-full">
+                    <h1 className="text-6xl font-black text-[#004d26] mb-4">৪০৪</h1>
+                    <p className="text-slate-500 font-bold mb-8 text-lg">পেজটি খুঁজে পাওয়া যায়নি!</p>
+                    <Link href="/" className="bg-[#004d26] text-white px-8 py-4 rounded-2xl font-black">
+                        হোমে ফিরে যান
+                    </Link>
                 </div>
             </div>
         );
@@ -81,52 +107,59 @@ export default function DynamicPolicyPage() {
     return (
         <div className="bg-gray-50 min-h-screen font-['Hind_Siliguri'] pb-20">
 
-            {/* --- Page Header --- */}
-            <div className="bg-[#004d26] pt-20 pb-24 text-center text-white px-4">
-                <div className="max-w-4xl mx-auto">
-                    
-                    <h1 className="text-3xl md:text-4xl font-black mb-4">{page.title}</h1>
-                    <p className="text-sm opacity-70 font-bold tracking-widest uppercase">সর্বশেষ আপডেট: {page.updateDate}</p>
+            <div className="bg-[#004d26] pt-20 pb-28 text-center text-white px-4 relative overflow-hidden">
+                <div className="max-w-4xl mx-auto relative z-10">
+                    <h1 className="text-3xl md:text-5xl font-black mb-4">{page.title}</h1>
+                    <p className="text-sm md:text-base opacity-80 font-bold tracking-widest uppercase bg-black/10 inline-block px-4 py-2 rounded-full">
+                        সর্বশেষ আপডেট: {formatDate(page.published_at || page.updated_at)}
+                    </p>
                 </div>
             </div>
 
-            {/* --- Content Card --- */}
-            <div className="max-w-4xl mx-auto px-4 -mt-12">
-                <div className="bg-white rounded-[40px] shadow-xl border border-gray-100 p-8 md:p-16 animate-fadeIn">
+            <div className="max-w-4xl mx-auto px-4 -mt-16 relative z-20">
+                <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 p-8 md:p-16">
 
-                    {/* Back Button */}
-                    <Link href="/" className="inline-flex items-center gap-2 text-slate-400 font-bold mb-10 hover:text-[#004d26] transition-colors text-sm">
-                        <ChevronLeft size={16} />
+                    <Link href="/" className="inline-flex items-center gap-2 text-slate-400 font-bold mb-10 hover:text-[#004d26] transition-colors text-sm group">
+                        <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                         হোমে ফিরে যান
                     </Link>
 
-                    {/* Main Content Render */}
-                    <article className="prose prose-slate prose-lg max-w-none font-bold text-slate-600 leading-relaxed">
-                        {page.content}
+                    {/* Content using dangerouslySetInnerHTML */}
+                    <article className="prose prose-slate prose-lg max-w-none font-medium text-slate-600 leading-relaxed">
+                        <div
+                            dangerouslySetInnerHTML={{ __html: page.content }}
+                            className="space-y-4"
+                        />
                     </article>
 
-                    {/* Bottom Contact Tip */}
-                    <div className="mt-16 p-8 bg-gray-50 rounded-3xl border border-dashed border-gray-200 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="mt-20 p-8 bg-emerald-50 rounded-[32px] border border-dashed border-[#004d26]/20 flex flex-col md:flex-row items-center justify-between gap-6">
                         <div>
-                            <h4 className="font-black text-slate-900 mb-1 text-lg">বুঝতে অসুবিধা হচ্ছে?</h4>
-                            <p className="text-sm text-slate-500 font-bold">যেকোনো পলিসি সম্পর্কে বিস্তারিত জানতে আমাদের কল করুন।</p>
+                            <h4 className="font-black text-slate-900 mb-1 text-xl">বুঝতে অসুবিধা হচ্ছে?</h4>
+                            <p className="text-sm text-slate-500 font-bold">যেকোনো পলিসি সম্পর্কে বিস্তারিত জানতে সরাসরি আমাদের সাথে যোগাযোগ করুন।</p>
                         </div>
-                        <Link href="/contact" className="bg-white text-[#004d26] ring-1 ring-[#004d26] px-6 py-3 rounded-xl font-black hover:bg-[#004d26] hover:text-white transition-all text-sm">
-                            যোগাযোগ করুন
+                        <Link href="tel:+8801XXXXXXX" className="bg-[#004d26] text-white px-8 py-4 rounded-2xl font-black hover:bg-black transition-all shadow-md text-sm whitespace-nowrap">
+                            কল করুন
                         </Link>
                     </div>
                 </div>
             </div>
 
             <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-      `}</style>
+                article :global(h1), article :global(h2), article :global(h3) {
+                    color: #0f172a;
+                    font-weight: 900;
+                    margin-top: 2rem;
+                    margin-bottom: 1rem;
+                }
+                article :global(p) {
+                    margin-bottom: 1.2rem;
+                }
+                article :global(ul) {
+                    list-style-type: disc;
+                    padding-left: 1.5rem;
+                    margin-bottom: 1.2rem;
+                }
+            `}</style>
         </div>
     );
 }
