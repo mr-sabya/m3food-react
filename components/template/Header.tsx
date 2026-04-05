@@ -87,8 +87,8 @@ export default function Header({ settings }: HeaderProps) {
                     >
                         <ShoppingBag size={24} className="text-slate-700 group-hover:text-[#004d26]" />
 
-                        {cartCount > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-[#C41E3A] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-md border-2 border-white animate-bounce">
+                        {cartCount >= 0 && (
+                            <span className="absolute -top-2 -right-2 bg-[#C41E3A] text-white text-[11px] font-bold w-6 h-6 flex items-center justify-center rounded-full shadow-md border-2 border-white animate-bounce">
                                 {cartCount}
                             </span>
                         )}

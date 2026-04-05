@@ -42,6 +42,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                 headers: getHeaders()
             });
             const result = await res.json();
+            console.log("Cart data fetched:", result);
             if (result.success) {
                 setCartCount(result.count || 0);
                 setTotalAmount(result.total_amount || 0);

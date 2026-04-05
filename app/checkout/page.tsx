@@ -254,7 +254,7 @@ export default function CheckoutPage() {
                                 <div key={item.id} className="flex items-center gap-5 bg-gray-50 p-4 rounded-[24px] border border-gray-100 group">
                                     <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0 border-4 border-white shadow-md">
                                         <img
-                                            src={`${STORAGE_URL}/${item.product.image}`}
+                                            src={`${STORAGE_URL}/${item.product.thumbnail_image_path}`}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             alt={item.product.name}
                                         />

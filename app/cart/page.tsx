@@ -67,7 +67,7 @@ export default function CartPage() {
                                 {cartItems.map((item) => (
                                     <div key={item.id} className="py-6 flex flex-col md:flex-row items-center gap-6 border-b last:border-0 relative">
                                         {updatingId === item.id && <div className="absolute inset-0 bg-white/60 z-10 flex items-center justify-center"><Loader2 className="animate-spin text-[#004d26]" /></div>}
-                                        <img src={`${process.env.NEXT_PUBLIC_STORAGE_URL}/${item.product.image}`} className="w-24 h-24 rounded-2xl object-cover" alt="" />
+                                        <img src={`${process.env.NEXT_PUBLIC_STORAGE_URL}/${item.product.thumbnail_image_path}`} className="w-24 h-24 rounded-2xl object-cover" alt="" />
                                         <div className="flex-grow text-center md:text-left">
                                             <h3 className="font-black text-lg text-slate-900">{item.product.name}</h3>
                                             <button onClick={() => handleRemove(item.id)} className="text-red-500 text-xs font-bold mt-2 flex items-center gap-1 mx-auto md:mx-0"><Trash2 size={14} /> রিমুভ</button>
